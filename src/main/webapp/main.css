@@ -121,6 +121,7 @@ select option {
 .panel-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 8px;
     margin-bottom: 12px;
     padding-bottom: 10px;
@@ -136,6 +137,34 @@ select option {
     color: #4a4a4a;
     font-size: 14px;
     font-weight: 600;
+    flex: 1;
+}
+
+/* === Speaker Button (Text-to-Speech) === */
+.speaker-btn {
+    background: #f5f2ed;
+    border: 1px solid #e5e1d8;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    color: #4a4a4a;
+}
+
+.speaker-btn:hover {
+    background: #ebe7dd;
+    border-color: #d4cfc3;
+    transform: scale(1.05);
+}
+
+.speaker-btn:active {
+    transform: scale(0.95);
+}
+
+.speaker-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 textarea {
@@ -198,7 +227,7 @@ textarea:read-only {
     border-color: #d4cfc3;
 }
 
-/* === Translate Button (below panels, centered) === */
+/* === Translate Button === */
 .top-actions {
     display: flex;
     justify-content: center;
@@ -272,5 +301,10 @@ textarea:read-only {
 
     .btn {
         max-width: 100%;
+    }
+    
+    .speaker-btn {
+        font-size: 14px;
+        padding: 5px 10px;
     }
 }

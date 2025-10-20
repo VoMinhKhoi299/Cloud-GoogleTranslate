@@ -12,8 +12,8 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1> Project CLOUD: DỊCH VĂN BẢN ĐA NGÔN NGỮ</h1>
-        <p>Hỗ trợ 30+ ngôn ngữ - Dịch văn bản</p>
+        <h1>🌐 Project CLOUD: DỊCH VĂN BẢN ĐA NGÔN NGỮ</h1>
+        <p>Hỗ trợ 30+ ngôn ngữ - Dịch văn bản & Phát âm</p>
     </div>
 
     <form action="translate" method="post">
@@ -59,9 +59,12 @@
             <div class="text-panel">
                 <div class="panel-header">
                     <div class="panel-title">Văn bản gốc</div>
+                    <button type="button" class="speaker-btn" id="speakSource" title="Phát âm văn bản gốc">
+                        🔊
+                    </button>
                 </div>
                 <textarea name="text" id="sourceText" placeholder="Nhập nội dung cần dịch tại đây...">${sourceText}</textarea>
-                <div class="char-count" id="charCount">0 / 5000 ký tự</div>
+                <div class="char-count" id="charCount">${sourceText != null ? sourceText.length() : 0} / 5000 ký tự</div>
             </div>
 
             <button class="swap-button" id="swapBtn" type="button">⇄</button>
@@ -69,6 +72,9 @@
             <div class="text-panel">
                 <div class="panel-header">
                     <div class="panel-title">Bản dịch</div>
+                    <button type="button" class="speaker-btn" id="speakTarget" title="Phát âm bản dịch">
+                        🔊
+                    </button>
                 </div>
                 <textarea id="targetText" placeholder="Kết quả dịch sẽ xuất hiện ở đây..." readonly>${translatedText}</textarea>
                 <div class="char-count">Sẵn sàng dịch</div>
@@ -103,20 +109,84 @@
         const srcText = document.getElementById('sourceText');
         const tgtText = document.getElementById('targetText');
 
-        // Hoán đổi ngôn ngữ
         const tempLang = src.value;
         src.value = tgt.value;
         tgt.value = tempLang;
 
-        // Hoán đổi nội dung giữa hai ô text
         const tempText = srcText.value;
         srcText.value = tgtText.value;
         tgtText.value = tempText;
 
-        // Cập nhật lại bộ đếm ký tự
         const charCount = document.getElementById('charCount');
         charCount.textContent = `${srcText.value.length} / 5000 ký tự`;
     });
+
+    // Text-to-Speech cho văn bản gốc
+    document.getElementById('speakSource').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const text = document.getElementById('sourceText').value;
+        const language = document.getElementById('sourceLang').value;
+        
+        if (!text.trim()) {
+            alert('Vui lòng nhập văn bản trước!');
+            return;
+        }
+
+        await playTextToSpeech(text, language, e.target);
+    });
+
+    // Text-to-Speech cho bản dịch
+    document.getElementById('speakTarget').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const text = document.getElementById('targetText').value;
+        const language = document.getElementById('targetLang').value;
+        
+        if (!text.trim()) {
+            alert('Chưa có bản dịch để phát âm!');
+            return;
+        }
+
+        await playTextToSpeech(text, language, e.target);
+    });
+
+    // Hàm gọi API Text-to-Speech
+    async function playTextToSpeech(text, language, button) {
+        const originalText = button.textContent;
+        button.textContent = '⏳';
+        button.disabled = true;
+
+        try {
+            const formData = new FormData();
+            formData.append('text', text);
+            formData.append('language', language);
+
+            const response = await fetch('textToSpeech', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Không thể tạo giọng nói');
+            }
+
+            const audioBlob = await response.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            
+            audio.play();
+            
+            audio.onended = () => {
+                URL.revokeObjectURL(audioUrl);
+                button.textContent = originalText;
+                button.disabled = false;
+            };
+
+        } catch (error) {
+            alert('Lỗi: ' + error.message);
+            button.textContent = originalText;
+            button.disabled = false;
+        }
+    }
 </script>
 
 </body>
