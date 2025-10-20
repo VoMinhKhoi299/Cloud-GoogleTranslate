@@ -17,7 +17,8 @@ public class TranslateController extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json; charset=UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+
 
         try {
             String sourceText = request.getParameter("text");
@@ -40,14 +41,14 @@ public class TranslateController extends HttpServlet {
             request.getRequestDispatcher("/index.jsp").forward(request, response);
 
         } catch (Exception e) {
-            sendError(response, "Lỗi khi dịch văn bản: " + e.getMessage());
+            request.setAttribute("error", "Lỗi khi dịch văn bản: " + e.getMessage());
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
     }
 
     private String translateTextV3(String text, String sourceLang, String targetLang) throws IOException {
         try (TranslationServiceClient client = TranslationServiceClient.create()) {
             LocationName parent = LocationName.of(PROJECT_ID, "global");
-
             TranslateTextRequest request = TranslateTextRequest.newBuilder()
                     .setParent(parent.toString())
                     .setMimeType("text/plain")
@@ -55,7 +56,6 @@ public class TranslateController extends HttpServlet {
                     .setTargetLanguageCode(targetLang)
                     .addContents(text)
                     .build();
-
             TranslateTextResponse response = client.translateText(request);
             return response.getTranslations(0).getTranslatedText();
         }
