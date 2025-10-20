@@ -1,4 +1,4 @@
-package com.cloudtranslation;
+package com.cloudtranslate;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -32,12 +32,12 @@ public class TranslateController extends HttpServlet {
             // Dịch văn bản bằng Cloud Translation v3
             String translatedText = translateTextV3(sourceText, sourceLang, targetLang);
 
-            // Gửi kết quả về frontend
-            JSONObject result = new JSONObject();
-            result.put("success", true);
-            result.put("translatedText", translatedText);
-            result.put("model", "Cloud Translation v3 - NMT");
-            response.getWriter().write(result.toString());
+            request.setAttribute("sourceText", sourceText);
+            request.setAttribute("translatedText", translatedText);
+            request.setAttribute("sourceLang", sourceLang);
+            request.setAttribute("targetLang", targetLang);
+
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
 
         } catch (Exception e) {
             sendError(response, "Lỗi khi dịch văn bản: " + e.getMessage());
