@@ -12,7 +12,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>🌐 Project CLOUD: DỊCH VĂN BẢN ĐA NGÔN NGỮ</h1>
+        <h1>DỊCH VĂN BẢN ĐA NGÔN NGỮ</h1>
         <p>Hỗ trợ 30+ ngôn ngữ - Dịch văn bản & Phát âm</p>
     </div>
 
@@ -33,6 +33,22 @@
                     <option value="th" ${sourceLang == 'th' ? 'selected' : ''}>ภาษาไทย</option>
                     <option value="ar" ${sourceLang == 'ar' ? 'selected' : ''}>العربية</option>
                     <option value="pt" ${sourceLang == 'pt' ? 'selected' : ''}>Português</option>
+                    <option value="fr" ${sourceLang == 'fr' ? 'selected' : ''}>Français (French)</option>
+                    <option value="de" ${sourceLang == 'de' ? 'selected' : ''}>Deutsch (German)</option>
+                    <option value="it" ${sourceLang == 'it' ? 'selected' : ''}>Italiano (Italian)</option>
+                    <option value="ru" ${sourceLang == 'ru' ? 'selected' : ''}>Русский (Russian)</option>
+                    <option value="uk" ${sourceLang == 'uk' ? 'selected' : ''}>Українська (Ukrainian)</option>
+                    <option value="pl" ${sourceLang == 'pl' ? 'selected' : ''}>Polski (Polish)</option>
+                    <option value="cs" ${sourceLang == 'cs' ? 'selected' : ''}>Čeština (Czech)</option>
+                    <option value="nl" ${sourceLang == 'nl' ? 'selected' : ''}>Nederlands (Dutch)</option>
+                    <option value="sv" ${sourceLang == 'sv' ? 'selected' : ''}>Svenska (Swedish)</option>
+                    <option value="da" ${sourceLang == 'da' ? 'selected' : ''}>Dansk (Danish)</option>
+                    <option value="no" ${sourceLang == 'no' ? 'selected' : ''}>Norsk (Norwegian)</option>
+                    <option value="fi" ${sourceLang == 'fi' ? 'selected' : ''}>Suomi (Finnish)</option>
+                    <option value="tr" ${sourceLang == 'tr' ? 'selected' : ''}>Türkçe (Turkish)</option>
+                    <option value="el" ${sourceLang == 'el' ? 'selected' : ''}>Ελληνικά (Greek)</option>
+                    <option value="ro" ${sourceLang == 'ro' ? 'selected' : ''}>Română (Romanian)</option>
+                    <option value="hu" ${sourceLang == 'hu' ? 'selected' : ''}>Magyar (Hungarian)</option>
                 </select>
             </div>
 
@@ -51,6 +67,22 @@
                     <option value="th" ${targetLang == 'th' ? 'selected' : ''}>ภาษาไทย</option>
                     <option value="ar" ${targetLang == 'ar' ? 'selected' : ''}>العربية</option>
                     <option value="pt" ${targetLang == 'pt' ? 'selected' : ''}>Português</option>
+                    <option value="fr" ${targetLang == 'fr' ? 'selected' : ''}>Français (French)</option>
+                    <option value="de" ${targetLang == 'de' ? 'selected' : ''}>Deutsch (German)</option>
+                    <option value="it" ${targetLang == 'it' ? 'selected' : ''}>Italiano (Italian)</option>
+                    <option value="ru" ${targetLang == 'ru' ? 'selected' : ''}>Русский (Russian)</option>
+                    <option value="uk" ${targetLang == 'uk' ? 'selected' : ''}>Українська (Ukrainian)</option>
+                    <option value="pl" ${targetLang == 'pl' ? 'selected' : ''}>Polski (Polish)</option>
+                    <option value="cs" ${targetLang == 'cs' ? 'selected' : ''}>Čeština (Czech)</option>
+                    <option value="nl" ${targetLang == 'nl' ? 'selected' : ''}>Nederlands (Dutch)</option>
+                    <option value="sv" ${targetLang == 'sv' ? 'selected' : ''}>Svenska (Swedish)</option>
+                    <option value="da" ${targetLang == 'da' ? 'selected' : ''}>Dansk (Danish)</option>
+                    <option value="no" ${targetLang == 'no' ? 'selected' : ''}>Norsk (Norwegian)</option>
+                    <option value="fi" ${targetLang == 'fi' ? 'selected' : ''}>Suomi (Finnish)</option>
+                    <option value="tr" ${targetLang == 'tr' ? 'selected' : ''}>Türkçe (Turkish)</option>
+                    <option value="el" ${targetLang == 'el' ? 'selected' : ''}>Ελληνικά (Greek)</option>
+                    <option value="ro" ${targetLang == 'ro' ? 'selected' : ''}>Română (Romanian)</option>
+                    <option value="hu" ${targetLang == 'hu' ? 'selected' : ''}>Magyar (Hungarian)</option>
                 </select>
             </div>
         </div>
@@ -118,6 +150,10 @@
 
         const charCount = document.getElementById('charCount');
         charCount.textContent = `${srcText.value.length} / 5000 ký tự`;
+
+        if (srcText.value.trim()) {
+            document.querySelector('form').submit();
+        }
     });
 
     // Text-to-Speech cho văn bản gốc
