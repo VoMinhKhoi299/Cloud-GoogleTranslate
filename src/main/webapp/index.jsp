@@ -93,7 +93,6 @@
     </c:if>
 
 </div>
-
 <script>
     // Tính số ký tự nhập vào
     const textArea = document.getElementById('sourceText');
@@ -126,7 +125,7 @@
         e.preventDefault();
         const text = document.getElementById('sourceText').value;
         const language = document.getElementById('sourceLang').value;
-        
+
         if (!text.trim()) {
             alert('Vui lòng nhập văn bản trước!');
             return;
@@ -140,7 +139,7 @@
         e.preventDefault();
         const text = document.getElementById('targetText').value;
         const language = document.getElementById('targetLang').value;
-        
+
         if (!text.trim()) {
             alert('Chưa có bản dịch để phát âm!');
             return;
@@ -149,32 +148,37 @@
         await playTextToSpeech(text, language, e.target);
     });
 
-    // Hàm gọi API Text-to-Speech
     async function playTextToSpeech(text, language, button) {
         const originalText = button.textContent;
         button.textContent = '⏳';
         button.disabled = true;
 
         try {
-            const formData = new FormData();
-            formData.append('text', text);
-            formData.append('language', language);
+            const params = new URLSearchParams();
+            params.append('text', text);
+            params.append('language', language);
 
             const response = await fetch('textToSpeech', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: params.toString()
             });
 
             if (!response.ok) {
-                throw new Error('Không thể tạo giọng nói');
+                const errorText = await response.text();
+                console.error('Server error:', errorText);
+                alert('Lỗi máy chủ: ' + errorText);
+                throw new Error(errorText);
             }
 
             const audioBlob = await response.blob();
             const audioUrl = URL.createObjectURL(audioBlob);
             const audio = new Audio(audioUrl);
-            
+
             audio.play();
-            
+
             audio.onended = () => {
                 URL.revokeObjectURL(audioUrl);
                 button.textContent = originalText;
@@ -182,12 +186,13 @@
             };
 
         } catch (error) {
-            alert('Lỗi: ' + error.message);
+            console.error('Lỗi phát âm:', error);
+            alert('Lỗi: ' + (error.message || 'Không thể phát âm'));
             button.textContent = originalText;
             button.disabled = false;
         }
     }
 </script>
-
 </body>
 </html>
+
